@@ -588,7 +588,7 @@ document.addEventListener("keydown",function(e){
   else if(e.key==="ArrowRight"){if(canPlace(current,currentX+1,currentY)){currentX++;draw();}}
   else if(e.key==="ArrowDown"){
     e.preventDefault();
-    if(canPlace(current,currentX,currentY+1)){currentY++;score+=1;updateUI();}
+    if(canPlace(current,currentX,currentY+1)){currentY++;}
     else lock();draw();
   }
   else if(e.key==="ArrowUp"){e.preventDefault();tryRotate();draw();}
@@ -602,7 +602,7 @@ var acts={
   tcRotate:function(){if(!gameOver&&!paused){tryRotate();draw();}lastInputTime=Date.now();},
   tcDown:function(){
     if(!gameOver&&!paused){
-      if(canPlace(current,currentX,currentY+1)){currentY++;score+=1;updateUI();}
+      if(canPlace(current,currentX,currentY+1)){currentY++;}
       else lock();draw();
     }lastInputTime=Date.now();
   },
