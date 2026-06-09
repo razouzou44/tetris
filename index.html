@@ -82,6 +82,15 @@ html,body{height:100%;overflow:hidden;background:#070b16;font-family:"Hanken Gro
     <div id="dangerBar"><div id="dangerFill"></div></div>
   </div>
 
+  <div style="width:100%;max-width:340px;margin-top:4px">
+    <div style="font-size:9px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:#f97316;margin-bottom:3px;display:flex;justify-content:space-between">
+      <span>☄️ Prochaine météorite</span><span id="meteorPct">—</span>
+    </div>
+    <div style="height:6px;background:#1e2d45;border-radius:999px;overflow:hidden">
+      <div id="meteorBar" style="height:100%;border-radius:999px;background:linear-gradient(90deg,#f97316,#ef4444);transition:width .3s;width:0%"></div>
+    </div>
+  </div>
+
   <div class="game-row">
     <div style="display:flex;flex-direction:column;gap:8px">
       <div class="panel"><h3>Score</h3><div class="big-num" id="scoreDisplay">0</div></div>
@@ -169,9 +178,9 @@ var tauntTimer=null,comboTimer=null;
 
 /* ── METEOR STATE ── */
 var meteor=null;
-var meteorInterval=20000;
+var meteorInterval=12000;
 var lastMeteorTime=0;
-var meteorStartDelay=12000;
+var meteorStartDelay=5000;
 var gameStartTime=0;
 var meteorWarningFrames=0;
 
@@ -195,7 +204,8 @@ function getSpeed(){return Math.max(50,480-((level-1)*48));}
 
 function initGame(){
   board=newBoard();score=0;lines=0;level=1;gameOver=false;paused=false;
-  consecutiveSZ=0;meteor=null;gameStartTime=Date.now();lastMeteorTime=Date.now();
+  consecutiveSZ=0;meteor=null;gameStartTime=Date.now();
+  lastMeteorTime=Date.now()-(meteorInterval-meteorStartDelay);
   var t1=evilPiece();nextMat=PIECES[t1];nextType=t1;
   spawnPiece();updateUI();
   lastTime=0;dropAccum=0;
@@ -521,6 +531,28 @@ function updateDanger(){
   else fill.style.background="linear-gradient(90deg,#ef4444,#a855f7)";
   document.getElementById("rageCount").textContent=pct>85?"DANGER — FUYEZ !!!":pct>65?"C'est tres mal parti...":"";
   document.getElementById("rageCount").style.color=pct>85?"#ef4444":"#f97316";
+
+  var mb=document.getElementById("meteorBar");
+  var mp=document.getElementById("meteorPct");
+  if(mb&&mp){
+    if(meteor){
+      mb.style.width="100%";mb.style.background="#ef4444";
+      mp.textContent="EN APPROCHE !";
+    } else {
+      var now=Date.now();
+      var elapsed=now-lastMeteorTime;
+      var total=meteorInterval;
+      var startElapsed=now-gameStartTime;
+      if(startElapsed<meteorStartDelay){
+        var warmPct=Math.round(startElapsed/meteorStartDelay*100);
+        mb.style.width=warmPct+"%";mp.textContent=Math.ceil((meteorStartDelay-startElapsed)/1000)+"s";
+      } else {
+        var mpct=Math.min(100,Math.round(elapsed/total*100));
+        mb.style.width=mpct+"%";
+        mp.textContent=Math.max(0,Math.ceil((total-elapsed)/1000))+"s";
+      }
+    }
+  }
 }
 
 /* ── FX ── */
