@@ -133,7 +133,7 @@ html,body{height:100%;overflow:hidden;background:#070b16;font-family:"Hanken Gro
       Pièces nulles garanties.<br>Meteores inclus. Bonne chance.
     </div>
     <button class="start-btn" id="startBtn">Souffrir !</button>
-    <div class="mode-hint">← → Deplacer &nbsp; ↑ Rotation<br>Espace Drop &nbsp; P Pause<br><span style="color:#f97316">☄️ Meteore toutes les ~20 sec</span></div>
+    <div class="mode-hint">← → Deplacer &nbsp; ↑ Rotation<br>Espace Drop &nbsp; P Pause<br><span style="color:#f97316">☄️ Meteore toutes les ~5 sec</span></div>
   </div>
 </div>
 
@@ -178,7 +178,7 @@ var tauntTimer=null,comboTimer=null;
 
 /* ── METEOR STATE ── */
 var meteor=null;
-var meteorInterval=12000;
+var meteorInterval=5000;
 var lastMeteorTime=0;
 var meteorStartDelay=5000;
 var gameStartTime=0;
